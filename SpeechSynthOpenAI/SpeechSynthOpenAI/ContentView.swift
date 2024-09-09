@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var viewModel: ViewModel
     @State private var inputText = ""
 
     var body: some View {
@@ -36,9 +37,15 @@ struct ContentView: View {
 
             Spacer()
 
+            Text("Status: \(viewModel.synthStatus)")
+                .font(.title3)
+                .foregroundStyle(.white)
+
+            Spacer()
+
             VStack(alignment: .center) {
                 Button {
-                    speak(inputText)
+                    viewModel.synthesizeSpeech(from: inputText)
                 } label: {
                     Text("Synthesize")
                         .foregroundStyle(.white)
@@ -47,6 +54,7 @@ struct ContentView: View {
                         .background(Color.blue)
                         .cornerRadius(16)
                 }
+                .disabled(viewModel.synthStatus != .ready)
                 .frame(maxWidth: .infinity)
             }
 
@@ -54,12 +62,8 @@ struct ContentView: View {
         .padding()
         .background(Color.black.ignoresSafeArea(.all))
     }
-
-    private func speak(_ text: String) {
-        // TODO: Call OpenAI to speak the text.
-    }
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: ViewModel())
 }
