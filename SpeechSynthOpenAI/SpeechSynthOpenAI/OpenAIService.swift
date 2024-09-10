@@ -10,7 +10,7 @@ import Foundation
 final class OpenAIService {
     private let createSpeechEndpoint = "https://api.openai.com/v1/audio/speech"
 
-    func synthesizeSpeech(from text: String) async throws -> URL {
+    func synthesizeSpeech(from text: String, model: OpenAICreateSpeechModel = .tts1, voice: OpenAICreateSpeechVoice = .alloy) async throws -> URL {
         let url = URL(string: createSpeechEndpoint)!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -18,7 +18,12 @@ final class OpenAIService {
         request.setValue("Bearer \(APIKeys.openAI)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let body = OpenAICreateSpeechBody(model: .tts1, input: text, voice: .alloy)
+        let body = OpenAICreateSpeechBody(model: model,
+                                          input: text,
+                                          voice: voice,
+                                          responseFormat: nil,
+                                          speed: nil)
+        
         request.httpBody = try JSONEncoder().encode(body)
 
         let session = URLSession(configuration: .default)
