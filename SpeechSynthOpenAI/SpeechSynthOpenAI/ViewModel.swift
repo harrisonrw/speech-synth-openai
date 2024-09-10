@@ -15,6 +15,8 @@ enum SpeechSynthStatus: String {
 }
 
 final class ViewModel: NSObject, ObservableObject {
+    @Published var selectedModel: OpenAICreateSpeechModel = .tts1
+    @Published var selectedVoice: OpenAICreateSpeechVoice = .alloy
     @Published var synthStatus: SpeechSynthStatus = .ready
 
     private let openAIService = OpenAIService()
@@ -32,7 +34,7 @@ final class ViewModel: NSObject, ObservableObject {
             guard let self else { return }
 
             do {
-                let speechURL = try await openAIService.synthesizeSpeech(from: text)
+                let speechURL = try await openAIService.synthesizeSpeech(from: text, model: selectedModel, voice: selectedVoice)
                 print(speechURL.absoluteString)
 
                 try await MainActor.run { [weak self] in
