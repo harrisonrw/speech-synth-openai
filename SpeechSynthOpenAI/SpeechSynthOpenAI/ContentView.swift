@@ -34,6 +34,12 @@ struct ContentView: View {
                 .listRowBackground(Color.gray.opacity(0.2))
 
                 Section("Options") {
+                    Picker("Audio Format", selection: $viewModel.selectedFormat) {
+                        ForEach(viewModel.supportedFormats, id: \.self) { format in
+                            Text(format.rawValue)
+                        }
+                    }
+
                     Picker("Model", selection: $viewModel.selectedModel) {
                         ForEach(OpenAICreateSpeechModel.allCases, id: \.self) { model in
                             Text(model.rawValue)
@@ -46,11 +52,17 @@ struct ContentView: View {
                         }
                     }
 
-                    // TODO: add Format
-
-                    // TODO: add Speed
+                    VStack {
+                        HStack {
+                            Text("Speed")
+                            Spacer()
+                            Text("\(viewModel.selectedSpeed, specifier: "%.1f")")
+                        }
+                        Slider(value: $viewModel.selectedSpeed, in: 0.4...1.0)
+                    }
                 }
                 .listRowBackground(Color.gray.opacity(0.2))
+                .listRowSeparatorTint(.gray)
 
                 Section {
                     Text("Status: \(viewModel.synthStatus)")
@@ -77,7 +89,6 @@ struct ContentView: View {
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             }
-            .listStyle(.plain)
             .scrollContentBackground(.hidden)
             .foregroundColor(.white) // Section Header color.
             .background(.black)
