@@ -58,7 +58,7 @@ struct ContentView: View {
                             Spacer()
                             Text("\(viewModel.selectedSpeed, specifier: "%.1f")")
                         }
-                        Slider(value: $viewModel.selectedSpeed, in: 0.4...1.0)
+                        Slider(value: $viewModel.selectedSpeed, in: viewModel.minSpeed...viewModel.maxSpeed)
                     }
                 }
                 .listRowBackground(Color.gray.opacity(0.2))

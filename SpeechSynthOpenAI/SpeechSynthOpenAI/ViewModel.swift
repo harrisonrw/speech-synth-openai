@@ -17,7 +17,11 @@ enum SpeechSynthStatus: String {
 final class ViewModel: NSObject, ObservableObject {
     @Published var selectedModel: OpenAICreateSpeechModel = .tts1
     @Published var selectedVoice: OpenAICreateSpeechVoice = .alloy
+
     @Published var selectedSpeed: Double = 1.0
+    let minSpeed: Double = 0.4
+    let maxSpeed: Double = 1.0
+
     @Published var synthStatus: SpeechSynthStatus = .ready
 
     @Published var selectedFormat: OpenAICreateSpeechResponseFormat = .mp3
